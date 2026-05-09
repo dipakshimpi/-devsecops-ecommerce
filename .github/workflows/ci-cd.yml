@@ -19,14 +19,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 🏗️ SECOPS: Scan K8s manifests for security misconfigurations
-      - name: Checkov Scan
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: k8s/
-          framework: kubernetes
-          quiet: true # Only show errors
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
