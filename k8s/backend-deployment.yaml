@@ -23,14 +23,34 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: false # Set to true for even higher security
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 5000
           startupProbe:
             httpGet:
-              path: /api/products
+              path: /health
               port: 5000
             failureThreshold: 10
             periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
             - name: DB_HOST
               value: "db"
