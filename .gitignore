@@ -22,3 +22,7 @@ terraform.tfstate*
 
 # OS files
 .DS_Store
+
+# DevOps Tools
+*.exe
+*.zip
