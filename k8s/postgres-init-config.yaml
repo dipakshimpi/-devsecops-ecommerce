@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-config
+data:
+  init.sql: |
+    -- Create Users Table
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Create Products Table
+    CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        description TEXT,
+        price DECIMAL(10, 2) NOT NULL,
+        stock INT DEFAULT 0,
+        image_url VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Seed Products
+    INSERT INTO products (name, description, price, stock, image_url) VALUES
+    ('DevOps Essentials Hoodie', 'Comfortable hoodie for long coding sessions.', 49.99, 100, 'https://via.placeholder.com/150'),
+    ('Kubernetes Master Cap', 'Keep your head cool while managing clusters.', 19.99, 50, 'https://via.placeholder.com/150'),
+    ('Docker Whale Plushie', 'A soft companion for your desk.', 25.00, 30, 'https://via.placeholder.com/150'),
+    ('Terraform "Apply" Mug', 'Infrastructure as coffee.', 15.00, 200, 'https://via.placeholder.com/150');

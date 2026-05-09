@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true" # Make this the default
+provisioner: ebs.csi.aws.com # The modern driver we just installed
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  type: gp3 # gp3 is newer, faster, and cheaper than gp2!
