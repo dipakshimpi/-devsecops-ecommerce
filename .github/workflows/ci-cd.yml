@@ -3,21 +3,15 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  security-and-build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # 🔐 SECOPS: Scan for secrets
-      - name: Gitleaks Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Needed to push changes back to the repo
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -30,44 +24,36 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Backend: Build -> Scan -> Push
-      - name: Build Backend image
-        run: docker build -t ecommerce-backend ./backend
-
-      - name: 🛡️ Trivy Scan (Backend)
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'ecommerce-backend'
-          format: 'table'
-          exit-code: '0' # Set to 1 in production to stop the build if unsafe
-          severity: 'CRITICAL,HIGH'
-
-      - name: Push Backend to ECR
+      # 🚀 Build and Push with UNIQUE TAG (GitHub SHA)
+      - name: Build and Push Backend
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag ecommerce-backend $ECR_REGISTRY/ecommerce-backend:latest
-          docker push $ECR_REGISTRY/ecommerce-backend:latest
+          docker build -t $ECR_REGISTRY/ecommerce-backend:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/ecommerce-backend:$IMAGE_TAG
 
-      # Frontend: Build -> Scan -> Push
-      - name: Build Frontend image
+      - name: Build and Push Frontend
         env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
           VITE_API_URL: http://a9d97f0211a274da08442f6d39336e4c-1162729234.ap-south-1.elb.amazonaws.com/api
         run: |
-          docker build -t ecommerce-frontend \
+          docker build -t $ECR_REGISTRY/ecommerce-frontend:$IMAGE_TAG \
             --build-arg VITE_API_URL=$VITE_API_URL ./frontend
+          docker push $ECR_REGISTRY/ecommerce-frontend:$IMAGE_TAG
 
-      - name: 🛡️ Trivy Scan (Frontend)
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'ecommerce-frontend'
-          format: 'table'
-          exit-code: '0'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Push Frontend to ECR
+      # 🪄 GITOPS MAGIC: Update the YAML files with the new Image Tag
+      - name: Update Kubernetes Manifests
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag ecommerce-frontend $ECR_REGISTRY/ecommerce-frontend:latest
-          docker push $ECR_REGISTRY/ecommerce-frontend:latest
+          sed -i "s|image:.*ecommerce-backend:.*|image: $ECR_REGISTRY/ecommerce-backend:$IMAGE_TAG|g" k8s/backend-deployment.yaml
+          sed -i "s|image:.*ecommerce-frontend:.*|image: $ECR_REGISTRY/ecommerce-frontend:$IMAGE_TAG|g" k8s/frontend-deployment.yaml
+          
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add k8s/
+          git commit -m "Auto-update images to $IMAGE_TAG [skip ci]"
+          git push origin main

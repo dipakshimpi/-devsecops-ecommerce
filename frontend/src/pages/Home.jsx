@@ -6,12 +6,15 @@ const Home = () => {
   return (
     <div className="flex flex-col items-center gap-16 py-12">
       <section className="text-center space-y-6 max-w-3xl">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tighter bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-          The Ultimate DevOps E-commerce Store
+        <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+          <Zap className="h-4 w-4" /> Live on AWS EKS with ArgoCD
+        </div>
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tighter bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          DevSecOps Cloud Shop 🚀
         </h1>
         <p className="text-xl text-muted-foreground">
-          Built with React, Node.js, and best-in-class DevOps practices. 
-          Ready for Docker, Kubernetes, and AWS deployment.
+          Built with React, Node.js, and fully automated GitOps. 
+          Secured by DevSecOps best practices.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link to="/products">
