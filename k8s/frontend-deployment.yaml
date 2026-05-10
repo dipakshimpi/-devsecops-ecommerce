@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-frontend:aa3017318fb90f4cd6cb864f19c90d5da1f2f48c
+          image: 077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-frontend:5931e3c5e7e04b5a4f51c3d88fd9c4b4a4f9d401
           imagePullPolicy: Always
           resources:
             requests:
