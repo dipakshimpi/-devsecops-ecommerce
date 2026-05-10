@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
 apiVersion: v2
 name: ecommerce-app
 description: A Helm chart for the 3-tier DevSecOps E-Commerce Application
