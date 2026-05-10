@@ -1,0 +1,21 @@
+# Default values for ecommerce-app.
+
+replicaCount: 1
+
+frontend:
+  image: "077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-frontend:latest"
+  serviceType: LoadBalancer
+  port: 80
+
+backend:
+  image: "077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-backend:latest"
+  serviceType: ClusterIP
+  port: 5000
+
+postgres:
+  image: postgres:15
+  port: 5432
+  storage: 1Gi
+  database: ecommerce
+  user: admin
+  password: supersecretpassword

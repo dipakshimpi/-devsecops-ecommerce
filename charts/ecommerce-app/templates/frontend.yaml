@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ecommerce-app.fullname" . }}-frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: {{ .Values.frontend.image }}
+        ports:
+        - containerPort: {{ .Values.frontend.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: {{ .Values.frontend.serviceType }}
+  ports:
+  - port: 80
+    targetPort: {{ .Values.frontend.port }}
+  selector:
+    app: frontend
