@@ -72,11 +72,11 @@ graph TD
 ---
 
 ## 💖 Special Acknowledgment
-A heartful thanks to **Vishakha Sadhwani** ( [LinkedIn](https://www.linkedin.com/in/vishakha-sadhwani/) ) for her invaluable guidance, support, and mentorship throughout this project. This journey would not have been the same without her expertise!
+A heartful thanks to **Vishakha Sadhwani** ( [LinkedIn](https://www.linkedin.com/in/vsadhwani/) ) for her invaluable guidance, support, and mentorship throughout this project. This journey would not have been the same without her expertise!
 
 ---
 
 ## 🏆 Project Status: Complete & Production-Ready
 This project is an end-to-end implementation of a modern cloud-native workflow. It is built to be secure, automated, and observable.
 
-**Created with ❤️ by [Your Name]**
+**Created with ❤️ by Dipak Shimpi**
