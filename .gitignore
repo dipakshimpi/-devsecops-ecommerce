@@ -19,6 +19,18 @@ build/
 # Infrastructure
 terraform.tfstate*
 .terraform/
+.terraform.lock.hcl
+*.out
+*.json
+!aiops-ui/package.json
+!charts/**
+
+# Python
+__pycache__/
+*.pyc
+aiops-ui/test_bedrock.py
+aiops-ui/eks-policy.json
+output.json
 
 # OS files
 .DS_Store
