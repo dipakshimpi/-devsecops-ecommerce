@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=none
 # Default values for ecommerce-app.
 
 replicaCount: 1
