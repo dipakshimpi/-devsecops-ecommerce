@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-backend:20b9209ccfb1323152d413a6f06cf2fff0436af3
+          image: 077437903019.dkr.ecr.ap-south-1.amazonaws.com/ecommerce-backend:b3c287cecba560f92fd44dc93e5abeb5b4f785fb
           imagePullPolicy: Always
           resources:
             requests:
